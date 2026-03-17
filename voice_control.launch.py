@@ -340,7 +340,7 @@ def generate_launch_description():
         gripper_bridge,
 
         # force monitor
-        force_monitor_sim,
+        # force_monitor_sim,
 
         # control helper
         control_position_node,
