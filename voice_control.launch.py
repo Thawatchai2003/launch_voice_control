@@ -9,9 +9,7 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    # -----------------------------
     # Launch args
-    # -----------------------------
     ur_type = LaunchConfiguration("ur_type")
     robot_ip = LaunchConfiguration("robot_ip")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
@@ -68,11 +66,6 @@ def generate_launch_description():
         "ur5_with_gripper.rviz",
     ])
 
-    # -----------------------------
-    # ✅ UR config files (ใช้ของ ur5_custom_description)
-    # - fake: ใช้ default_kinematics.yaml
-    # - real: ใช้ calibration.yaml
-    # -----------------------------
     ur5e_cfg_dir = PathJoinSubstitution([
         FindPackageShare("ur5_custom_description"),
         "config",
@@ -93,9 +86,6 @@ def generate_launch_description():
         "else ('", calibration_params, "')"
     ])
 
-    # -----------------------------
-    # ✅ UR driver (ur_robot_driver) ใช้ URDF + config ของคุณ
-    # -----------------------------
     ur_driver = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -111,17 +101,12 @@ def generate_launch_description():
             "launch_rviz": launch_rviz,
             "initial_joint_controller": initial_joint_controller,
 
-            # ✅ ใช้ URDF custom ของคุณ
             "description_package": "ur5_custom_description",
             "description_file": "ur5e_with_gripper.urdf.xacro",
 
-            # ✅ controllers ของคุณ
             "controllers_file": controllers_file,
-
-            # ✅ rviz config ของคุณ
             "rviz_config": rviz_config,
 
-            # ✅ ส่ง config params ให้ ur_control
             "joint_limit_params": joint_limit_params,
             "kinematics_params": kinematics_params,
             "physical_params": physical_params,
@@ -129,10 +114,7 @@ def generate_launch_description():
         }.items(),
     )
 
-    # -----------------------------
     # ReSpeaker mic array (NEW)
-    # เปิด/ปิดได้ด้วย launch arg
-    # -----------------------------
     respeaker_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -148,9 +130,6 @@ def generate_launch_description():
         condition=IfCondition(enable_respeaker),
     )
 
-    # -----------------------------
-    # ✅ รวม MoveIt (ur_moveit_config) มารันใน launch นี้เลย
-    # -----------------------------
     moveit_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -167,10 +146,8 @@ def generate_launch_description():
         }.items(),
     )
 
-    # -----------------------------
+   
     # Spawn only GRIPPER controller (SIM only)
-    # แขน: ur_control.launch.py spawn ให้อยู่แล้ว ห้าม spawn ซ้ำ
-    # -----------------------------
     gripper_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -180,9 +157,7 @@ def generate_launch_description():
     )
     auto_spawn_gripper = TimerAction(period=3.5, actions=[gripper_spawner])
 
-    # -----------------------------
     # Voice stack nodes
-    # -----------------------------
     audio_receiver = Node(
         package="ur5_sim_gz",
         executable="audio_receiver_node",
@@ -268,9 +243,7 @@ def generate_launch_description():
         output="screen",
     )
 
-    # -----------------------------
     # Gripper bridge (sim/real)
-    # -----------------------------
     gripper_bridge = Node(
         package="ur5_sim_gz",
         executable="gripper_bridge_node",
@@ -301,9 +274,7 @@ def generate_launch_description():
         }],
     )
 
-    # -----------------------------
     # Robot command nodes
-    # -----------------------------
     mapper_sim = Node(
         package="ur5_sim_gz",
         executable="ur5_cmd_mapper_node",
@@ -322,9 +293,7 @@ def generate_launch_description():
         condition=IfCondition(use_fake_hardware),
     )
 
-    # -----------------------------
     # Control Position Node
-    # -----------------------------
     control_position_node = Node(
         package="ur5_sim_gz",
         executable="control_position_node",
@@ -372,9 +341,7 @@ def generate_launch_description():
         condition=IfCondition(PythonExpression(["'", use_fake_hardware, "' == 'false'"])),
     )
 
-    # -----------------------------
     # Logical pick object (SIM only)
-    # -----------------------------
     logical_pick_object_node = Node(
         package="ur5_workcell_scene",
         executable="logical_pick_object_node",
@@ -392,9 +359,7 @@ def generate_launch_description():
         actions=[logical_pick_object_node],
     )
 
-    # -----------------------------
     # driver + MoveIt + controllers ก่อนค่อยสตาร์ต command nodes
-    # -----------------------------
     delayed_robot_nodes = TimerAction(
         period=6.0,
         actions=[
@@ -405,9 +370,7 @@ def generate_launch_description():
         ],
     )
 
-    # -----------------------------
     # Force monitor nodes (SIM / REAL)
-    # -----------------------------
     force_monitor_sim = Node(
         package="ur5_force_tools",
         executable="force_gui",
