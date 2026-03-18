@@ -35,7 +35,7 @@ def generate_launch_description():
     ])
 
     rviz_config = PathJoinSubstitution([
-        FindPackageShare("ur5_sim_gz"),
+        FindPackageShare("ur5e_voice_control"),
         "rviz",
         "ur5_with_gripper.rviz",
     ])
@@ -129,21 +129,21 @@ def generate_launch_description():
 
     # Voice stack nodes
     beep = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="beep_node",
         name="beep_node",
         output="screen",
     )
 
     tts = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="tts_node_gtts",
         name="tts_node_gtts",
         output="screen",
     )
 
     stt = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="speech_to_text_node",
         name="speech_to_text_node",
         output="screen",
@@ -156,7 +156,7 @@ def generate_launch_description():
     )
 
     fsm = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="dialog_fsm_node",
         name="dialog_fsm_node",
         output="screen",
@@ -173,21 +173,21 @@ def generate_launch_description():
     )
 
     gui = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="speech_gui_node",
         name="speech_gui_node",
         output="screen",
     )
 
     nlu = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="nlu_parser_node",
         name="nlu_parser_node",
         output="screen",
     )
 
     logger = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="voice_logger_node",
         name="voice_logger_node",
         output="screen",
@@ -196,7 +196,7 @@ def generate_launch_description():
     # Gripper bridge (sim/real)
     # NOTE:
     gripper_bridge = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="gripper_bridge_node",
         name="gripper_bridge_node",
         output="screen",
@@ -227,7 +227,7 @@ def generate_launch_description():
 
     # Robot command nodes
     mapper_sim = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="ur5_cmd_mapper_node",
         name="ur5_cmd_mapper_node",
         output="screen",
@@ -245,7 +245,7 @@ def generate_launch_description():
     )
 
     executor_sim = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="ur5_executor_node",
         name="ur5_executor_node",
         output="screen",
@@ -256,7 +256,7 @@ def generate_launch_description():
     )
 
     mapper_real = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="ur5_cmd_mapper_node",
         name="ur5_cmd_mapper_node_real",
         output="screen",
@@ -274,7 +274,7 @@ def generate_launch_description():
     )
 
     executor_real = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="ur5_executor_node",
         name="ur5_executor_node_real",
         output="screen",
@@ -286,7 +286,7 @@ def generate_launch_description():
 
     # Control Position Node
     control_position_node = Node(
-        package="ur5_sim_gz",
+        package="ur5e_voice_control",
         executable="control_position_node",
         name="control_position_node",
         output="screen",
@@ -372,8 +372,8 @@ def generate_launch_description():
         gripper_bridge,
 
         # force monitor
-        force_monitor_sim,
-        force_monitor_real,
+        #force_monitor_sim,
+       # force_monitor_real,
 
         # delayed robot helpers
         delayed_control_position,
